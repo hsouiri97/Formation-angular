@@ -12,8 +12,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { DishdetailComponent } from './dishdetail/dishdetail.component';
 
+import { DishService } from './services/dish.service';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+
 @NgModule({
-  declarations: [AppComponent, MenuComponent, DishdetailComponent],
+  declarations: [AppComponent, MenuComponent, DishdetailComponent, HeaderComponent, FooterComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -24,7 +28,7 @@ import { DishdetailComponent } from './dishdetail/dishdetail.component';
     MatCardModule,
     MatButtonModule,
   ],
-  providers: [],
+  providers: [DishService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
