@@ -24,10 +24,13 @@ export class HomeComponent implements OnInit {
     @Inject('BaseURL') public BaseURL
   ) {}
 
-  ngOnInit(): void {
-    this.dishService.getFeaturedDish().subscribe((dish) => (this.dish = dish));
-    console.log('dish: ', this.dish);
+  dishErrMess: string;
 
+  ngOnInit(): void {
+    this.dishService.getFeaturedDish().subscribe(
+      (dish) => (this.dish = dish),
+      (dishErrMess) => (this.dishErrMess = dishErrMess)
+    );
     this.promotionService
       .getFeaturedPromotion()
       .subscribe((promotion) => (this.promotion = promotion));

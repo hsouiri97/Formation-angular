@@ -17,11 +17,11 @@ export class MenuComponent implements OnInit {
     @Inject('BaseURL') public BaseURL
   ) {}
 
+  errMess: string;
   ngOnInit(): void {
-    this.dishService.getDishes().subscribe((dishes) => (this.dishes = dishes));
-  }
-
-  onSelect(dish) {
-    this.selectedDish = dish;
+    this.dishService.getDishes().subscribe(
+      (dishes) => (this.dishes = dishes),
+      (errMess) => (this.errMess = <any>errMess)
+    );
   }
 }
