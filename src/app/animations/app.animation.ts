@@ -35,7 +35,7 @@ export function flyInOut() {
     ]),
     transition(':leave', [
       animate(
-        '500ms ease-out',
+        '5000ms ease-out',
         style({ transform: 'translateX(100%)', opacity: 0 })
       ),
     ]),

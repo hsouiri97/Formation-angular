@@ -31,17 +31,21 @@ export class HomeComponent implements OnInit {
   ) {}
 
   dishErrMess: string;
+  promoErrMess: string;
+  leaderErrMess: string;
 
   ngOnInit(): void {
     this.dishService.getFeaturedDish().subscribe(
       (dish) => (this.dish = dish),
-      (dishErrMess) => (this.dishErrMess = dishErrMess)
+      (dishErrMess) => (this.dishErrMess = <any>dishErrMess)
     );
-    this.promotionService
-      .getFeaturedPromotion()
-      .subscribe((promotion) => (this.promotion = promotion));
-    this.leaderService
-      .getFeaturedLeader()
-      .subscribe((leader) => (this.leader = leader));
+    this.promotionService.getFeaturedPromotion().subscribe(
+      (promotion) => (this.promotion = promotion),
+      (promoErrMess) => (this.promoErrMess = <any>promoErrMess)
+    );
+    this.leaderService.getFeaturedLeader().subscribe(
+      (leader) => (this.leader = leader),
+      (leaderErrMess) => (this.leaderErrMess = <any>leaderErrMess)
+    );
   }
 }

@@ -39,92 +39,127 @@
 
   <div fxFlex fxFlexOffset="20px" class="form-size">
     <h3>Send us your Feedback</h3>
-    <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
-
-    <form
-      novalidate
-      [formGroup]="feedbackForm"
-      #fform="ngForm"
-      (ngSubmit)="onSubmit()"
-    >
-      <p>
-        <mat-form-field class="half-width">
-          <input
-            matInput
-            formControlName="firstname"
-            placeholder="First Name"
-            type="text"
-          />
-          <mat-error *ngIf="formErrors.firstname">{{
-            formErrors.firstname
-          }}</mat-error>
-        </mat-form-field>
-        <mat-form-field class="half-width">
-          <input
-            matInput
-            formControlName="lastname"
-            placeholder="Last Name"
-            type="text"
-          />
-          <mat-error *ngIf="formErrors.lastname">{{
-            formErrors.lastname
-          }}</mat-error>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field class="half-width">
-          <input
-            matInput
-            formControlName="telnum"
-            placeholder="Tel. Number"
-            type="tel"
-            pattern="[0-9]*"
-          />
-          <mat-error *ngIf="formErrors.telnum">{{
-            formErrors.telnum
-          }}</mat-error>
-        </mat-form-field>
-        <mat-form-field class="half-width">
-          <input
-            matInput
-            formControlName="email"
-            placeholder="Email"
-            type="email"
-          />
-          <mat-error *ngIf="formErrors.email">{{ formErrors.email }}</mat-error>
-        </mat-form-field>
-      </p>
-      <table class="form-size">
-        <td>
-          <mat-slide-toggle formControlName="agree"
-            >May we contact you?</mat-slide-toggle
-          >
-        </td>
-        <td>
-          <mat-select placeholder="How?" formControlName="contacttype">
-            <mat-option *ngFor="let ctype of contactType" [value]="ctype">
-              {{ ctype }}
-            </mat-option>
-          </mat-select>
-        </td>
-      </table>
-      <p>
-        <mat-form-field class="full-width">
-          <textarea
-            matInput
-            formControlName="message"
-            placeholder="Your Feedback"
-            rows="12"
-          ></textarea>
-        </mat-form-field>
-      </p>
-      <button
-        type="submit"
-        mat-button
-        class="background-primary text-floral-white"
+    <div *ngIf="showForm" [@expand]>
+      <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
+      <form
+        novalidate
+        [formGroup]="feedbackForm"
+        #fform="ngForm"
+        (ngSubmit)="onSubmit()"
       >
-        Submit
-      </button>
-    </form>
+        <p>
+          <mat-form-field class="half-width">
+            <input
+              matInput
+              formControlName="firstname"
+              placeholder="First Name"
+              type="text"
+            />
+            <mat-error *ngIf="formErrors.firstname">{{
+              formErrors.firstname
+            }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="half-width">
+            <input
+              matInput
+              formControlName="lastname"
+              placeholder="Last Name"
+              type="text"
+            />
+            <mat-error *ngIf="formErrors.lastname">{{
+              formErrors.lastname
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field class="half-width">
+            <input
+              matInput
+              formControlName="telnum"
+              placeholder="Tel. Number"
+              type="tel"
+              pattern="[0-9]*"
+            />
+            <mat-error *ngIf="formErrors.telnum">{{
+              formErrors.telnum
+            }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="half-width">
+            <input
+              matInput
+              formControlName="email"
+              placeholder="Email"
+              type="email"
+            />
+            <mat-error *ngIf="formErrors.email">{{
+              formErrors.email
+            }}</mat-error>
+          </mat-form-field>
+        </p>
+        <table class="form-size">
+          <td>
+            <mat-slide-toggle formControlName="agree"
+              >May we contact you?</mat-slide-toggle
+            >
+          </td>
+          <td>
+            <mat-select placeholder="How?" formControlName="contacttype">
+              <mat-option *ngFor="let ctype of contactType" [value]="ctype">
+                {{ ctype }}
+              </mat-option>
+            </mat-select>
+          </td>
+        </table>
+        <p>
+          <mat-form-field class="full-width">
+            <textarea
+              matInput
+              formControlName="message"
+              placeholder="Your Feedback"
+              rows="12"
+            ></textarea>
+          </mat-form-field>
+        </p>
+        <button
+          type="submit"
+          mat-button
+          class="background-primary text-floral-white"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+    <div *ngIf="showFeedback" [@expand]>
+      <h3>Your Submission</h3>
+      <p>
+        First Name: <span>{{ feedback.firstname }}</span>
+      </p>
+      <p>
+        Last Name: <span>{{ feedback.lastname }}</span>
+      </p>
+      <p>
+        Tel. Number: <span>{{ feedback.telnum }}</span>
+      </p>
+      <p>
+        Email: <span>{{ feedback.email }}</span>
+      </p>
+      <p>
+        Conatct You?: <span>{{ feedback.agree }}</span>
+      </p>
+      <p>
+        How?: <span>{{ feedback.contacttype }}</span>
+      </p>
+      <p>
+        Feedback: <span>{{ feedback.message }}</span>
+      </p>
+    </div>
+    <div [hidden]="!showSpinner">
+      <h3>Submitting form</h3>
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="errMess" [@expand]>
+      <h2>Error</h2>
+      <h4>{{ errMess }}</h4>
+    </div>
   </div>
 </div>

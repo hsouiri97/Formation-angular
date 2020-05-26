@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animation';
+import { flyInOut, expand } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';
 
 @Component({
   selector: 'app-contact',
@@ -11,16 +12,23 @@ import { flyInOut } from '../animations/app.animation';
     '[@flyInOut]': 'true',
     style: 'display: block;',
   },
-  animations: [flyInOut()],
+  animations: [flyInOut(), expand()],
 })
 export class ContactComponent implements OnInit {
   feedback: Feedback;
   feedbackForm: FormGroup;
   contactType = ContactType;
+  errMess: string;
+  showForm: boolean = true;
+  showFeedback: boolean = false;
+  showSpinner: boolean = false;
 
   @ViewChild('fform') feedbackFormDirective;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private feedbackService: FeedbackService
+  ) {
     this.createForm();
   }
 
@@ -97,8 +105,6 @@ export class ContactComponent implements OnInit {
         this.formErrors[field] = '';
         const control = form.get(field);
         if (control && control.dirty && !control.valid) {
-          console.log('IM HEEERE');
-
           const messages = this.validationMessages[field];
           for (const key in control.errors) {
             if (control.errors.hasOwnProperty(key)) {
@@ -112,7 +118,24 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
+    this.showForm = false;
+    this.showSpinner = true;
+    this.feedbackService.submitFeedback(this.feedback).subscribe(
+      (feedback) => {
+        this.feedback = feedback;
+        this.showSpinner = false;
+        this.showFeedback = true;
+        setTimeout(() => {
+          this.showForm = true;
+          this.showFeedback = false;
+        }, 5000);
+      },
+      (errMess) => {
+        this.showSpinner = false;
+        this.feedback = null;
+        this.errMess = <any>errMess;
+      }
+    );
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
