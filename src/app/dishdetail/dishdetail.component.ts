@@ -15,6 +15,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class DishdetailComponent implements OnInit {
   dish: Dish;
+  dishCopy: Dish;
   dishIds: string[];
   prev: string;
   next: string;
@@ -52,18 +53,19 @@ export class DishdetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dishService.getDishIds().subscribe(
-      (ids) => (this.dishIds = ids),
-      (errMess) => (this.errMess = errMess)
-    );
+    this.dishService.getDishIds().subscribe((ids) => (this.dishIds = ids));
     this.route.params
       .pipe(
         switchMap((params: Params) => this.dishService.getDish(params['id']))
       )
-      .subscribe((dish) => {
-        this.dish = dish;
-        this.setPrevNext(dish.id);
-      });
+      .subscribe(
+        (dish) => {
+          this.dish = dish;
+          this.dishCopy = dish;
+          this.setPrevNext(dish.id);
+        },
+        (errMess) => (this.errMess = <any>errMess)
+      );
   }
 
   createForm() {
@@ -127,7 +129,18 @@ export class DishdetailComponent implements OnInit {
   onSubmit(): void {
     this.comment = this.previewComment;
     this.comment.date = new Date().toISOString();
-    this.dish.comments.push(this.comment);
+    this.dishCopy.comments.push(this.comment);
+    this.dishService.putDish(this.dishCopy).subscribe(
+      (dish) => {
+        this.dish = dish;
+        this.dishCopy = dish;
+      },
+      (errMess) => {
+        this.dish = null;
+        this.dishCopy = null;
+        this.errMess = <any>errMess;
+      }
+    );
     this.commentFormDirective.resetForm();
     this.commentForm.reset({
       name: '',
